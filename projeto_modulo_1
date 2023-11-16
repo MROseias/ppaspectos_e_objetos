@@ -1,0 +1,30 @@
+import org.aspectj.lang.annotation.Aspect;
+import org.aspectj.lang.annotation.Before;
+
+@Aspect
+public class VerificacaoSaldoInsuficienteAspect {
+
+    // Pointcut para capturar chamadas de método de saque em classes de conta
+    pointcut saqueOperation(double valor) : execution(* sacar(double)) && args(valor);
+
+    // Advice executado antes do método de saque
+    @Before("saqueOperation(valor)")
+    public void beforeSaque(double valor) {
+        // Lógica de verificação de saldo insuficiente
+        if (saldoInsuficiente(valor)) {
+            System.out.println("Saldo insuficiente. Operação de saque cancelada.");
+            throw new SaldoInsuficienteException("Saldo insuficiente");
+        }
+    }
+
+    // Lógica para verificar se o saldo é suficiente
+    private boolean saldoInsuficiente(double valor) {
+        // Adapte esta lógica conforme necessário
+        // Aqui, assume-se que você tem acesso ao objeto de conta atual
+        // e que cada conta implementa um método getSaldo()
+        double saldoDisponivel = // Obter o saldo disponível da conta atual
+
+        // Retorna true se o saldo for insuficiente, caso contrário, retorna false
+        return saldoDisponivel < valor;
+    }
+}
